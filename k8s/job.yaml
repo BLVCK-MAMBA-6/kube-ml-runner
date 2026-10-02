@@ -1,0 +1,36 @@
+# k8s/job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ml-inference-job
+spec:
+  backoffLimit: 2
+  completions: 1
+  parallelism: 1
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: ml-inference
+          image: ml-inference:latest
+          imagePullPolicy: Never
+          volumeMounts:
+            - name: model
+              mountPath: /models
+              readOnly: true
+            - name: data
+              mountPath: /data
+              readOnly: true
+            - name: output
+              mountPath: /output
+      volumes:
+        - name: model
+          persistentVolumeClaim:
+            claimName: model-pvc
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-pvc
+        - name: output
+          persistentVolumeClaim:
+            claimName: output-pvc

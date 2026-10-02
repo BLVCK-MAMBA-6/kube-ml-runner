@@ -1,0 +1,8 @@
+# Runtime outputs — generated when the job runs
+output/*.jsonl
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv*/
